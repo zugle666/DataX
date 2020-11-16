@@ -1,0 +1,16 @@
+{
+    "name": "kafkareader",
+    "parameter": {
+        "bootstrapServers": "",
+        "groupId": "",
+        "topic": "",
+        "keyDeserializer": "",
+        "valueDeserializer": "",
+        "enableAutoCommit": true,
+        "autoOffsetReset": "",
+        "autoCommitIntervalMs": "",
+        "sessionTimeoutMs": "",
+        "column": [],
+        "partitions": 0
+    }
+}

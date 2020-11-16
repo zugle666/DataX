@@ -1,0 +1,17 @@
+{
+    "name": "kafkawriter",
+    "parameter": {
+        "bootstrapServers": "",
+        "topic": "",
+        "column": [],
+        "keys": [],
+        "partitions": 0,
+        "acks": "",
+        "retries": "",
+        "batchSize": 0,
+        "lingerMs": 0,
+        "bufferMemory": 0,
+        "keyDeserializer": "",
+        "valueDeserializer": ""
+    }
+}

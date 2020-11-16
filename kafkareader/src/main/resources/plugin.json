@@ -1,0 +1,6 @@
+{
+    "name": "kafkareader",
+    "class": "cn.zugle.datax.plugin.reader.kafkareader.KafkaReader",
+    "description": "kafka reader",
+    "developer": "zhuzhq"
+}

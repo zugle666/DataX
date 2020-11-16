@@ -1,0 +1,6 @@
+{
+    "name": "kafkawriter",
+    "class": "cn.zugle.datax.plugin.writer.kafkawriter.KafkaWriter",
+    "description": "kafka writer",
+    "developer": "zhuzhq"
+}
