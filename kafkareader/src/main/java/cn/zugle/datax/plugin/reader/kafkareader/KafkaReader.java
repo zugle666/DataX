@@ -59,6 +59,7 @@ public class KafkaReader extends Reader {
         private KafkaConsumer<String, String> kafkaConsumer;
         private Boolean enableAutoCommit;
         private String topic;
+        private int pollSeconds;
 
         @Override
         public void init() {
@@ -66,38 +67,64 @@ public class KafkaReader extends Reader {
             this.topic = kafkaSliceConfig.getString(KeyConstant.TOPIC, KeyConstant.TOPIC_DEFAULT);
             this.enableAutoCommit = Boolean.valueOf(kafkaSliceConfig.getString(KeyConstant.ENABLE_AUTO_COMMIT,
                     KeyConstant.ENABLE_AUTO_COMMIT_DEFAULT));
+            this.pollSeconds = kafkaSliceConfig.getInt(KeyConstant.POLL_SECONDS, KeyConstant.POLL_SECONDS_DEFAULT);
         }
 
         @Override
         public void startRead(RecordSender recordSender) {
             this.kafkaConsumer = buildConsumer(kafkaSliceConfig);
             this.kafkaConsumer.subscribe(Collections.singletonList(topic));
-                ConsumerRecords<String, String> records = kafkaConsumer.poll(Duration.ofMinutes(1));
+                ConsumerRecords<String, String> records = kafkaConsumer.poll(Duration.ofSeconds(pollSeconds));
                 for (ConsumerRecord<String, String> record : records) {
                     Record r = recordSender.createRecord();
                     JSONArray jsonArray = JSONArray.parseArray(record.value());
                     for (int i=0; i<jsonArray.size();i++) {
                         KafkaValue kafkaValue = jsonArray.getObject(i, KafkaValue.class);
                         Column.Type type = Column.Type.valueOf(kafkaValue.getType());
+                        Object value = kafkaValue.getValue();
                         switch (type) {
                             case STRING:
-                                r.addColumn(new StringColumn(String.valueOf(kafkaValue.getValue())));
+                                StringColumn stringColumn = new StringColumn();
+                                if (value != null) {
+                                    stringColumn = new StringColumn(String.valueOf(kafkaValue.getValue()));
+                                }
+                                r.addColumn(stringColumn);
                                 break;
                             case DOUBLE:
-                                r.addColumn(new DoubleColumn(String.valueOf(kafkaValue.getValue())));
+                                DoubleColumn doubleColumn = new DoubleColumn();
+                                if (value != null) {
+                                    doubleColumn = new DoubleColumn(String.valueOf(kafkaValue.getValue()));
+                                }
+                                r.addColumn(doubleColumn);
                                 break;
                             case BYTES:
-                                r.addColumn(new BytesColumn((byte[])kafkaValue.getValue()));
+                                BytesColumn bytesColumn = new BytesColumn();
+                                if (value != null) {
+                                    bytesColumn = new BytesColumn((byte[])kafkaValue.getValue());
+                                }
+                                r.addColumn(bytesColumn);
                                 break;
                             case INT:
                             case LONG:
-                                r.addColumn(new LongColumn(String.valueOf(kafkaValue.getValue())));
+                                LongColumn longColumn = new LongColumn();
+                                if (value != null) {
+                                    longColumn = new LongColumn(String.valueOf(kafkaValue.getValue()));
+                                }
+                                r.addColumn(longColumn);
                                 break;
                             case DATE:
-                                r.addColumn(new DateColumn(Long.valueOf(String.valueOf(kafkaValue.getValue()))));
+                                DateColumn dateColumn = new DateColumn();
+                                if (value != null) {
+                                    dateColumn = new DateColumn(Long.valueOf(String.valueOf(kafkaValue.getValue())));
+                                }
+                                r.addColumn(dateColumn);
                                 break;
                             case BOOL:
-                                r.addColumn(new BoolColumn(Boolean.valueOf(String.valueOf(kafkaValue.getValue()))));
+                                BoolColumn boolColumn = new BoolColumn();
+                                if (value != null) {
+                                    boolColumn = new BoolColumn(Boolean.valueOf(String.valueOf(kafkaValue.getValue())));
+                                }
+                                r.addColumn(boolColumn);
                                 break;
                             case BAD:
                             case NULL:

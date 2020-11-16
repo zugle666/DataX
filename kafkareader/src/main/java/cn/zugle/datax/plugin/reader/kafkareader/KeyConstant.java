@@ -35,4 +35,7 @@ public class KeyConstant {
 
     public static final String PARTITIONS = "partitions";
     public static final int PARTITIONS_DEFAULT = 1;
+
+    public static final String POLL_SECONDS = "pollSeconds";
+    public static final int POLL_SECONDS_DEFAULT = 5;
 }

@@ -11,6 +11,7 @@
         "autoCommitIntervalMs": "",
         "sessionTimeoutMs": "",
         "column": [],
-        "partitions": 0
+        "partitions": 0,
+        "pollSeconds": 0
     }
 }

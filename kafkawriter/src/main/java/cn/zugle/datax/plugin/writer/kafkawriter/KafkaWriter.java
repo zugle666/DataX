@@ -90,32 +90,36 @@ public class KafkaWriter extends Writer {
                     KafkaValue value = new KafkaValue();
                     value.setType(column.getType().name());
                     value.setKey(this.columns.get(i));
-                    switch (column.getType()) {
-                        case INT:
-                            value.setValue(column.asBigInteger());
-                            break;
-                        case BOOL:
-                            value.setValue(column.asBoolean());
-                            break;
-                        case DATE:
-                            value.setValue(column.asDate().getTime());
-                            break;
-                        case LONG:
-                            value.setValue(column.asLong());
-                            break;
-                        case BYTES:
-                            value.setValue(column.asBytes());
-                            break;
-                        case DOUBLE:
-                            value.setValue(column.asDouble());
-                            break;
-                        case STRING:
-                            value.setValue(column.asString());
-                            break;
-                        case BAD:
-                        case NULL:
-                            value.setValue(null);
-                            break;
+                    if (column.getRawData() == null) {
+                        value.setValue(null);
+                    } else {
+                        switch (column.getType()) {
+                            case INT:
+                                value.setValue(column.asBigInteger());
+                                break;
+                            case BOOL:
+                                value.setValue(column.asBoolean());
+                                break;
+                            case DATE:
+                                value.setValue(column.asDate().getTime());
+                                break;
+                            case LONG:
+                                value.setValue(column.asLong());
+                                break;
+                            case BYTES:
+                                value.setValue(column.asBytes());
+                                break;
+                            case DOUBLE:
+                                value.setValue(column.asDouble());
+                                break;
+                            case STRING:
+                                value.setValue(column.asString());
+                                break;
+                            case BAD:
+                            case NULL:
+                                value.setValue(null);
+                                break;
+                        }
                     }
                     values.add(value);
                     if (keys.contains(value.getKey())) {
